@@ -14,3 +14,25 @@ const connection = mysql.createConnection({
     
 });
 
+
+function appMenu() {
+    inquirer
+    .prompt({
+        name: 'options',
+        type: 'rawlist',
+        message: 'What would you like to do?',
+        choices: [
+            'Add a new department',
+            'Add a new role',
+            'Add a new employee',
+            'View all departments',
+            'View all roles',
+            'View all employees',
+            'Update an employee role',
+        ],
+    }).then((answer) => {
+        console.log('You selected something!');
+    });
+};
+
+appMenu();
