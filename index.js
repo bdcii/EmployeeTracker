@@ -85,27 +85,74 @@ const addDept = () => {
     })
         .then((answer) => {
             const sql = "INSERT INTO department (name) VALUES (?)";
-            
 
             connection.query(sql, answer.department, (err, res) => {
-
-                //Upon entering department name, this callback generates error that states "Please enter a valid index"
-                // if (err) throw err;
-                // console.log("Number of records inserted: " + res.affectedRows);
-
-                //When using this callback, no error is generated AND no changes are actually made to the table
                 console.error(err);
                 if (err) throw err;
+                console.log('Department has been added!');
             });
             appMenu();
-        }); 
-   
+        });
+
 
 }
 
 const addRole = () => {
+    inquirer.prompt([
+        {
+            name: 'title',
+            type: 'input',
+            message: 'Enter the name of the new role',
+        },
+        {
+            name: 'salary',
+            type: 'input',
+            message: 'Enter the salary of the new role',
+        },
+        {
+            name: 'department',
+            type: 'rawlist',
+            message: 'Which department does this role fall under?',
+            choices: [
+                'Sales',
+                'Marketing',
+                'Engineering',
+                'Finance',
+                'Legal'
+            ],
+        }
 
+    ]).then((answers) => {
+
+        function getDeptID(department) {
+            if (department === 'Sales') {
+                return 001
+            } else if (department === 'Marketing') {
+                return 002
+            } else if (department === 'Engineering') {
+                return 003
+            } else if (department === 'Finance') {
+                return 004
+            } else if (department === 'Legal') {
+                return 005
+            }
+        }
+
+        const deptID = getDeptID(answers.department);
+
+        const sql = "INSERT INTO role (title, salary, department_id) VALUES (?,?,?)";
+
+        let values = [answers.title, answers.salary, deptID];
+
+        connection.query(sql, values, (err, res) => {
+            console.error(err);
+            if (err) throw err;
+            console.log('Role has been added!');
+        });
+        appMenu();
+    })
 }
+
 
 const addEmployee = () => {
 
@@ -118,14 +165,14 @@ const viewDept = () => {
 
     });
 }
-    
+
 
 const viewRoles = () => {
     connection.query('SELECT * FROM role', (err, res) => {
         console.table(res);
         appMenu();
     });
-    
+
 }
 
 const viewEmployees = () => {
@@ -133,7 +180,7 @@ const viewEmployees = () => {
         console.table(res);
         appMenu();
     });
-    
+
 }
 
 const updateRole = () => {
