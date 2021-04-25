@@ -155,7 +155,107 @@ const addRole = () => {
 
 
 const addEmployee = () => {
+    inquirer.prompt([
+        {
+            name: 'firstName',
+            type: 'input',
+            message: 'Please enter the employee first name',
+        },
+        {
+            name: 'lastName',
+            type: 'input',
+            message: 'Please enter the last name of the employee',
+        },
+        {
+            name: 'roleID',
+            type: 'rawlist',
+            message: 'What is the role of this employee?',
+            choices: [
+                'Salesperson',
+                'Sales Intern',
+                'Marketing Manager',
+                'Digital Marketing Specialist',
+                'Senior Engineer',
+                'Engineering Intern',
+                'Senior Accountant',
+                'Accountant',
+                'Senior Corporate Counsel',
+                'Laywer'
+            ],
+        },
+        {
+            name: 'manager',
+            type: 'rawlist',
+            message: 'Who is the manager of this employee?',
+            choices: [
+                'Lynette Price',
+                'Jeanette Watkins',
+                'Oliver Higgins',
+                'Kim McCormick',
+                'Bradley McLaughlin',
+                'No Manager for Employee'
+            ],
+        }
 
+    ]).then((answers) => {
+
+
+        function getRoleID(role) {
+            if (role === 'Salesperson') {
+                return 41
+            } else if (role === 'Sales Intern') {
+                return 42
+            } else if (role === 'Marketing Manager') {
+                return 51
+            } else if (role === 'Digital Marketing Specialist') {
+                return 52
+            } else if (role === 'Senior Engineer') {
+                return 61
+            } else if (role === 'Engineering Intern') {
+                return 62
+            } else if (role === 'Senior Accountant') {
+                return 71
+            } else if (role === 'Accountant') {
+                return 72
+            } else if (role === 'Senior Corporate Counsel') {
+                return 81
+            } else if (role === 'Lawyer') {
+                return 82
+            }
+        };
+
+        function getManagerID(manager) {
+            if (manager === 'Lynette Price') {
+                return 4408
+            } else if (manager === 'Jeanette Watkins') {
+                return 5028
+            } else if (manager === 'Oliver Higgins') {
+                return 6378
+            } else if (manager === 'Kim McCormick') {
+                return 7815
+            } else if (manager === 'Bradley McLaughlin') {
+                return 8632
+            } else if (manager === 'No Manager for Employee') {
+                return null
+            }
+
+        }
+
+        const role = getRoleID(answers.roleID);
+
+        const managerID = getManagerID(answers.manager)
+
+        const sql = "INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?)";
+
+        let values = [answers.firstName, answers.lastName, role, managerID];
+
+        connection.query(sql, values, (err, res) => {
+            console.error(err);
+            if (err) throw err;
+            console.log('Employee has been added!');
+        });
+        appMenu();
+    })
 }
 
 const viewDept = () => {
