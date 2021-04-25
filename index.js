@@ -3,8 +3,10 @@ const inquirer = require("inquirer");
 const mysql = require('mysql');
 const cTable = require('console.table');
 
+//used for my env file
 require('dotenv').config();
 
+//defines and sets parameters for connection to mysql database
 const connection = mysql.createConnection({
     host: 'localhost',
     port: 3306,
@@ -14,13 +16,13 @@ const connection = mysql.createConnection({
 
 });
 
-
+//Upon successful connection to database, application will start
 connection.connect((err) => {
     if (err) throw err;
     appMenu();
 })
 
-
+//function for application's main menu
 function appMenu() {
     inquirer
         .prompt({
@@ -76,7 +78,7 @@ function appMenu() {
 };
 
 
-
+//function to add department to database
 const addDept = () => {
     inquirer.prompt({
         name: 'department',
@@ -97,6 +99,7 @@ const addDept = () => {
 
 }
 
+//function to add role to database
 const addRole = () => {
     inquirer.prompt([
         {
@@ -153,7 +156,7 @@ const addRole = () => {
     })
 }
 
-
+//function to add employee to database
 const addEmployee = () => {
     inquirer.prompt([
         {
@@ -258,6 +261,7 @@ const addEmployee = () => {
     })
 }
 
+//function to view department table
 const viewDept = () => {
     connection.query('SELECT * FROM department', (err, res) => {
         console.table(res);
@@ -266,7 +270,7 @@ const viewDept = () => {
     });
 }
 
-
+//function to view role table
 const viewRoles = () => {
     connection.query('SELECT * FROM role', (err, res) => {
         console.table(res);
@@ -275,6 +279,7 @@ const viewRoles = () => {
 
 }
 
+//function to view employee table
 const viewEmployees = () => {
     connection.query('SELECT * FROM employee', (err, res) => {
         console.table(res);
@@ -283,6 +288,7 @@ const viewEmployees = () => {
 
 }
 
+//function to update role of employee
 const updateRole = () => {
     inquirer.prompt([
         {
@@ -336,12 +342,12 @@ const updateRole = () => {
                 return 4807
             } else if (employee === 'Jeanette Watkins') {
                 return 5028
-            } else if (employee ===  'Mike Web') {
+            } else if (employee === 'Mike Web') {
                 return 5049
-            } else if (employee ===  'Eileen Jensen') {
+            } else if (employee === 'Eileen Jensen') {
                 return 5132
-            }  else if (employee ===  'Lela Freeman') {
-                return  5389
+            } else if (employee === 'Lela Freeman') {
+                return 5389
             } else if (employee === 'Oliver Higgins') {
                 return 6378
             } else if (employee === 'Casey Cooper') {
@@ -396,7 +402,7 @@ const updateRole = () => {
         WHERE id = ?`;
 
         values = [role, employee];
-    
+
         connection.query(sql, values, (err, res) => {
             console.error(err);
             if (err) throw err;
@@ -405,5 +411,3 @@ const updateRole = () => {
         appMenu();
     })
 }
-
-
