@@ -111,7 +111,7 @@ const addRole = () => {
         },
         {
             name: 'department',
-            type: 'rawlist',
+            type: 'list',
             message: 'Which department does this role fall under?',
             choices: [
                 'Sales',
@@ -168,7 +168,7 @@ const addEmployee = () => {
         },
         {
             name: 'roleID',
-            type: 'rawlist',
+            type: 'list',
             message: 'What is the role of this employee?',
             choices: [
                 'Salesperson',
@@ -185,7 +185,7 @@ const addEmployee = () => {
         },
         {
             name: 'manager',
-            type: 'rawlist',
+            type: 'list',
             message: 'Who is the manager of this employee?',
             choices: [
                 'Lynette Price',
@@ -284,7 +284,126 @@ const viewEmployees = () => {
 }
 
 const updateRole = () => {
+    inquirer.prompt([
+        {
+            name: 'employee',
+            type: 'list',
+            message: 'Select Employee to update their role',
+            choices: [
+                'Lynette Price',
+                'Hugh Bailey',
+                'Dolores Schneider',
+                'Jeanette Watkins',
+                'Mike Web',
+                'Eileen Jensen',
+                'Lela Freeman',
+                'Oliver Higgins',
+                'Casey Cooper',
+                'Alan Zimmerman',
+                'Kim McCormick',
+                'Antonio Page',
+                'Hannah Porter',
+                'Bradley McLaughlin',
+                'Nancy Cobb',
+                'Seth Long'
+            ]
+        },
+        {
+            name: 'role',
+            type: 'list',
+            message: 'What is their new role?',
+            choices: [
+                'Salesperson',
+                'Sales Intern',
+                'Marketing Manager',
+                'Digital Marketing Specialist',
+                'Senior Engineer',
+                'Engineering Intern',
+                'Senior Accountant',
+                'Accountant',
+                'Senior Corporate Counsel',
+                'Laywer'
+            ],
+        },
+    ]).then((answers) => {
 
+        function getEmployeeID(employee) {
+            if (employee === 'Lynette Price') {
+                return 4408
+            } else if (employee === 'Hugh Bailey') {
+                return 4482
+            } else if (employee === 'Dolores Schneider') {
+                return 4807
+            } else if (employee === 'Jeanette Watkins') {
+                return 5028
+            } else if (employee ===  'Mike Web') {
+                return 5049
+            } else if (employee ===  'Eileen Jensen') {
+                return 5132
+            }  else if (employee ===  'Lela Freeman') {
+                return  5389
+            } else if (employee === 'Oliver Higgins') {
+                return 6378
+            } else if (employee === 'Casey Cooper') {
+                return 6198
+            } else if (employee === 'Alan Zimmerman') {
+                return 6755
+            } else if (employee === 'Kim McCormick') {
+                return 7815
+            } else if (employee === 'Antonio Page') {
+                return 7729
+            } else if (employee === 'Hannah Porter') {
+                return 7238
+            } else if (employee === 'Bradley McLaughlin') {
+                return 8632
+            } else if (employee === 'Nancy Cobb') {
+                return 8311
+            } else if (employee === 'Seth Long') {
+                return 8949
+            }
+        }
+
+        function setRoleID(role) {
+            if (role === 'Salesperson') {
+                return 41
+            } else if (role === 'Sales Intern') {
+                return 42
+            } else if (role === 'Marketing Manager') {
+                return 51
+            } else if (role === 'Digital Marketing Specialist') {
+                return 52
+            } else if (role === 'Senior Engineer') {
+                return 61
+            } else if (role === 'Engineering Intern') {
+                return 62
+            } else if (role === 'Senior Accountant') {
+                return 71
+            } else if (role === 'Accountant') {
+                return 72
+            } else if (role === 'Senior Corporate Counsel') {
+                return 81
+            } else if (role === 'Lawyer') {
+                return 82
+            }
+        }
+
+        const employee = getEmployeeID(answers.employee);
+
+        const role = setRoleID(answers.role);
+
+        const sql = `UPDATE employee
+        SET role_id = ?
+        WHERE id = ?`;
+
+        values = [role, employee];
+    
+        connection.query(sql, values, (err, res) => {
+            console.error(err);
+            if (err) throw err;
+            console.log('Employee role has been updated!');
+        });
+        appMenu();
+    })
 }
 
 
